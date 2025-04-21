@@ -9,7 +9,7 @@
     "displayName": "User"
   },
   "options": {
-    "timestamps": true
+    "draftAndPublish": false
   },
   "attributes": {
     "username": {
@@ -70,6 +70,19 @@
       "relation": "oneToOne",
       "target": "api::doctor.doctor",
       "mappedBy": "users_permissions_user"
+    },
+    "roleType": {
+      "type": "enumeration",
+      "enum": [
+        "DOCTOR",
+        "PATIENT"
+      ]
+    },
+    "firstname": {
+      "type": "string"
+    },
+    "lastname": {
+      "type": "string"
     },
     "patient": {
       "type": "relation",

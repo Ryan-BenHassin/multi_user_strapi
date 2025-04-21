@@ -4,7 +4,8 @@
   "info": {
     "singularName": "office",
     "pluralName": "offices",
-    "displayName": "Office"
+    "displayName": "Office",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -27,6 +28,12 @@
       "relation": "oneToMany",
       "target": "api::appointment.appointment",
       "mappedBy": "office"
+    },
+    "doctor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::doctor.doctor",
+      "inversedBy": "offices"
     }
   }
 }

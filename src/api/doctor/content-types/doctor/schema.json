@@ -19,6 +19,16 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "doctor"
+    },
+    "isApproved": {
+      "type": "boolean",
+      "default": false
+    },
+    "offices": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::office.office",
+      "mappedBy": "doctor"
     }
   }
 }

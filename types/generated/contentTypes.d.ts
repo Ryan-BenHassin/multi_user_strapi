@@ -418,12 +418,14 @@ export interface ApiDoctorDoctor extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    isApproved: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::doctor.doctor'
     > &
       Schema.Attribute.Private;
+    offices: Schema.Attribute.Relation<'oneToMany', 'api::office.office'>;
     publishedAt: Schema.Attribute.DateTime;
     speciality: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
@@ -436,9 +438,38 @@ export interface ApiDoctorDoctor extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiMessageMessage extends Struct.CollectionTypeSchema {
+  collectionName: 'messages';
+  info: {
+    displayName: 'Message';
+    pluralName: 'messages';
+    singularName: 'message';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::message.message'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    test: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiOfficeOffice extends Struct.CollectionTypeSchema {
   collectionName: 'offices';
   info: {
+    description: '';
     displayName: 'Office';
     pluralName: 'offices';
     singularName: 'office';
@@ -455,6 +486,7 @@ export interface ApiOfficeOffice extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.String;
+    doctor: Schema.Attribute.Relation<'manyToOne', 'api::doctor.doctor'>;
     latitude: Schema.Attribute.Float;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -963,7 +995,6 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -978,6 +1009,8 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    firstname: Schema.Attribute.String;
+    lastname: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -997,6 +1030,7 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    roleType: Schema.Attribute.Enumeration<['DOCTOR', 'PATIENT']>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1021,6 +1055,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::appointment.appointment': ApiAppointmentAppointment;
       'api::doctor.doctor': ApiDoctorDoctor;
+      'api::message.message': ApiMessageMessage;
       'api::office.office': ApiOfficeOffice;
       'api::patient.patient': ApiPatientPatient;
       'plugin::content-releases.release': PluginContentReleasesRelease;
