@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "requests",
+  "info": {
+    "singularName": "request",
+    "pluralName": "requests",
+    "displayName": "Contact Request",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "patient": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "contact_requests"
+    },
+    "doctor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "contact_requests"
+    },
+    "request_status": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "ACCEPTED",
+        "REJECTED"
+      ],
+      "default": "PENDING"
+    }
+  }
+}

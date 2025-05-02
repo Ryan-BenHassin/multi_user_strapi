@@ -89,6 +89,12 @@
       "relation": "oneToOne",
       "target": "api::patient.patient",
       "mappedBy": "users_permissions_user"
+    },
+    "contact_requests": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::request.request",
+      "mappedBy": "doctor"
     }
   }
 }

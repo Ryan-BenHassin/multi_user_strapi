@@ -540,6 +540,46 @@ export interface ApiPatientPatient extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiRequestRequest extends Struct.CollectionTypeSchema {
+  collectionName: 'requests';
+  info: {
+    description: '';
+    displayName: 'Contact Request';
+    pluralName: 'requests';
+    singularName: 'request';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    doctor: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::request.request'
+    > &
+      Schema.Attribute.Private;
+    patient: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    request_status: Schema.Attribute.Enumeration<
+      ['PENDING', 'ACCEPTED', 'REJECTED']
+    > &
+      Schema.Attribute.DefaultTo<'PENDING'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1000,6 +1040,10 @@ export interface PluginUsersPermissionsUser
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    contact_requests: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::request.request'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1058,6 +1102,7 @@ declare module '@strapi/strapi' {
       'api::message.message': ApiMessageMessage;
       'api::office.office': ApiOfficeOffice;
       'api::patient.patient': ApiPatientPatient;
+      'api::request.request': ApiRequestRequest;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
