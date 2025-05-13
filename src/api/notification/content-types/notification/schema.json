@@ -1,0 +1,51 @@
+{
+  "kind": "collectionType",
+  "collectionName": "notifications",
+  "info": {
+    "singularName": "notification",
+    "pluralName": "notifications",
+    "displayName": "Notification",
+    "description": "A collection to store notification records"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "body": {
+      "type": "text",
+      "required": true
+    },
+    "recipient": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "data": {
+      "type": "json"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "SENT",
+        "FAILED",
+        "DELIVERED",
+        "READ"
+      ],
+      "default": "SENT"
+    },
+    "notificationType": {
+      "type": "enumeration",
+      "enum": [
+        "APPOINTMENT",
+        "MESSAGE",
+        "SYSTEM",
+        "OTHER"
+      ],
+      "default": "SYSTEM"
+    }
+  }
+} 

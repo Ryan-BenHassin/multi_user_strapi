@@ -95,6 +95,9 @@
       "relation": "oneToMany",
       "target": "api::request.request",
       "mappedBy": "doctor"
+    },
+    "fcm": {
+      "type": "string"
     }
   }
 }
