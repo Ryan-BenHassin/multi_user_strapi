@@ -438,6 +438,31 @@ export interface ApiDoctorDoctor extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiHouseHouse extends Struct.CollectionTypeSchema {
+  collectionName: 'houses';
+  info: {
+    displayName: 'house';
+    pluralName: 'houses';
+    singularName: 'house';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::house.house'> &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiMessageMessage extends Struct.CollectionTypeSchema {
   collectionName: 'messages';
   info: {
@@ -460,6 +485,50 @@ export interface ApiMessageMessage extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     test: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiNotificationNotification
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'notifications';
+  info: {
+    description: 'A collection to store notification records';
+    displayName: 'Notification';
+    pluralName: 'notifications';
+    singularName: 'notification';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    body: Schema.Attribute.Text & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    data: Schema.Attribute.JSON;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::notification.notification'
+    > &
+      Schema.Attribute.Private;
+    notificationType: Schema.Attribute.Enumeration<
+      ['APPOINTMENT', 'MESSAGE', 'SYSTEM', 'OTHER']
+    > &
+      Schema.Attribute.DefaultTo<'SYSTEM'>;
+    publishedAt: Schema.Attribute.DateTime;
+    recipient: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    status: Schema.Attribute.Enumeration<
+      ['SENT', 'FAILED', 'DELIVERED', 'READ']
+    > &
+      Schema.Attribute.DefaultTo<'SENT'>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1053,6 +1122,7 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    fcm: Schema.Attribute.String;
     firstname: Schema.Attribute.String;
     lastname: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1061,6 +1131,10 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
+    notifications: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::notification.notification'
+    >;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
@@ -1099,7 +1173,9 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::appointment.appointment': ApiAppointmentAppointment;
       'api::doctor.doctor': ApiDoctorDoctor;
+      'api::house.house': ApiHouseHouse;
       'api::message.message': ApiMessageMessage;
+      'api::notification.notification': ApiNotificationNotification;
       'api::office.office': ApiOfficeOffice;
       'api::patient.patient': ApiPatientPatient;
       'api::request.request': ApiRequestRequest;

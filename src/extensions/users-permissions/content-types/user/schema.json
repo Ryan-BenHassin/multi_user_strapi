@@ -95,6 +95,15 @@
       "relation": "oneToMany",
       "target": "api::request.request",
       "mappedBy": "doctor"
+    },
+    "fcm": {
+      "type": "string"
+    },
+    "notifications": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::notification.notification",
+      "mappedBy": "user"
     }
   }
 }
